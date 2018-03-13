@@ -24,7 +24,7 @@
         // Pulls up Chrome UI for Pairing with BT device
         .then(device => device.gatt.connect())
         .then(server => server.getPrimaryService('12345678-1234-5678-1234-56789abcdef0'))
-        /*.then(service => {
+        .then(service => {
           service.getCharacteristic('12345678-1234-5678-1234-56789abcdef1')
           .then(characteristic => characteristic.getDescriptor('12345678-1234-5678-1234-56789abcdef3'))
           .then(descriptor => descriptor.readValue())
@@ -51,23 +51,23 @@
             console.log('The Conference Room Name is: ' + decoder.decode(cr));
           })
 
-          service.getCharacteristic('12345678-1234-5678-1234-56789abcdef5')
+          //service.getCharacteristic('12345678-1234-5678-1234-56789abcdef5')
           //.then(characteristic => characteristic.writeValue(encoder.encode('https://gm5pgi.pgimeet.com/GeorgeNixonGM5')))
-          .then(characteristic => characteristic.readValue())
-          .then(value => console.log('Started GM5 Room: ' + value))*/
+          //.then(characteristic => characteristic.readValue())
+          //.then(value => console.log('Started GM5 Room: ' + value))
           //.then(service => service.getCharacteristic('12345678-1234-5678-1234-56789abcdef5'))
-          .then(service => service.getCharacteristic('12345678-1234-5678-1234-56789abcdef5'))
-          .then(characteristic => characteristic.getDescriptor('gatt.characteristic_user_description'))
-          .then(descriptor => descriptor.writeValue(Uint8Array.of(1)))
+          //.then(service => service.getCharacteristic('12345678-1234-5678-1234-56789abcdef5'))
+          //.then(characteristic => characteristic.getDescriptor('gatt.characteristic_user_description'))
+          //.then(descriptor => descriptor.writeValue(Uint8Array.of(1)))
           //.then(characteristic => characteristic.writeValue(Uint8Array.of(1)))
-          .then(value => console.log('Started GM5 Room BY Writing' ))
-          .catch(error => {
-            console.log('Argh! ' + error);
-           })
-        //})
-        //.catch(error => {
-        //  console.log('Argh! ' + error);
-        //});
+          //.then(value => console.log('Started GM5 Room BY Writing' ))
+          //.catch(error => {
+          //  console.log('Argh! ' + error);
+          // })
+        })
+        .catch(error => {
+          console.log('Argh! ' + error);
+        });
     }
     </script>
 <script>
