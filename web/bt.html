@@ -1,0 +1,81 @@
+<html lang="en">
+  <head>
+  <link rel="stylesheet" href="https://googlechrome.github.io/samples/styles/main.css">
+  </head>
+
+  <body>
+    <form>
+      <button>Find Nearby GM Enable Rooms</button>
+    </form>
+
+    <script>
+    function onButtonClick() {
+
+      let options = {
+        acceptAllDevices: true,
+        optionalServices: ['battery_service','heart_rate','12345678-1234-5678-1234-56789abcdef0']
+        //filters: [{ services: ['12345678-1234-5678-1234-56789abcdef0', 'battery_service', 'heart_rate']}]
+        //filters: [{ services: ['battery_service']}]
+      };
+
+      console.log('Requesting Bluetooth Device...');
+      console.log('with ' + JSON.stringify(options));
+      navigator.bluetooth.requestDevice(options)
+        .then(device => device.gatt.connect())
+        .then(server => server.getPrimaryService('12345678-1234-5678-1234-56789abcdef0'))
+        .then(service => {
+          service.getCharacteristic('12345678-1234-5678-1234-56789abcdef1')
+            .then(characteristic => characteristic.readValue())
+            .then(cip => {
+              let gm5ConnectIp = cip.getUint8(0) + '.' + cip.getUint8(1) + '.' + cip.getUint8(2) + '.' + cip.getUint8(3);
+              console.log('The GM5 Connect IP is: ' + gm5ConnectIp);
+            });
+          service.getCharacteristic('12345678-1234-5678-1234-56789abcdef7')
+            .then(characteristic => characteristic.readValue())
+            .then(cr => {
+              let decoder = new TextDecoder('utf-8');
+              console.log('The Conference Room Name is: ' + decoder.decode(cr));
+            })
+        })
+        //.then(characteristic => characteristic.readValue())
+        //.then(characteristic => characteristic.getDescriptor('gatt.characteristic_user_description'))
+        //.then(descriptor => descriptor.readValue())
+        //.then(value => {
+        //  let decoder = new TextDecoder('utf-8');
+        //  console.log('User Description: ' + decoder.decode(value));
+        //})
+        //.then(value => {
+        //  console.log('The GM5 Connect IP is: ' + value);
+        //})
+        .catch(error => {
+          console.log('Argh! ' + error);
+        });
+    }
+    </script>
+<script>
+  document.querySelector('form').addEventListener('submit', function(event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    if (isWebBluetoothEnabled()) {
+      onButtonClick();
+    }
+  });
+</script>
+
+<script>
+
+  function isWebBluetoothEnabled() {
+    if (navigator.bluetooth) {
+      return true;
+    } else {
+      console.log('Web Bluetooth API is not available.\n' +
+          'Please make sure the "Experimental Web Platform features" flag is enabled.');
+      return false;
+    }
+  }
+</script>
+    
+  </body>
+</html>
+
